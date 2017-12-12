@@ -47,22 +47,29 @@ class FG_eval {
     // NOTE: You'll probably go back and forth between this function and
     // the Solver function below.
 
+  const double cte_weight = 2000;
+  const double epsi_weight = 2000;
+  const double v_weight = 1;
+  const double actuator_cost_weight = 10;
+  const double change_steer_cost_weight = 100000;
+  const double change_accel_cost_weight = 10000;    
+
     fg[0] = 0;
 
     for (int i = 0; i < N; i++) {
-      fg[0] += CppAD::pow(vars[cte_start + i] - ref_cte, 2);
-      fg[0] += CppAD::pow(vars[epsi_start + i] - ref_epsi, 2);
-      fg[0] += CppAD::pow(vars[v_start + i] - ref_v, 2);
+      fg[0] += cte_weight * CppAD::pow(vars[cte_start + i] - ref_cte, 2);
+      fg[0] += epsi_weight * CppAD::pow(vars[epsi_start + i] - ref_epsi, 2);
+      fg[0] += v_weight * CppAD::pow(vars[v_start + i] - ref_v, 2);
     }
 
     for (int i = 0; i < N - 1; i++) {
-      fg[0] += CppAD::pow(vars[delta_start + i], 2);
-      fg[0] += CppAD::pow(vars[a_start + i], 2);
+      fg[0] += actuator_cost_weight * CppAD::pow(vars[delta_start + i], 2);
+      fg[0] += actuator_cost_weight * CppAD::pow(vars[a_start + i], 2);
     }
 
     for (int i = 0; i < N - 2; i++) {
-      fg[0] += CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
-      fg[0] += CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
+      fg[0] += change_steer_cost_weight * CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
+      fg[0] += change_accel_cost_weight * CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
     }
     
     //
