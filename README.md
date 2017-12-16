@@ -1,12 +1,29 @@
 # CarND-Controls-MPC
-Self-Driving Car Engineer Nanodegree Program
 
----
+In this project we have to program an MPC controller to guide a car in the Udacity simultator. Some waypoints are given and the actuators have a latency of 100 ms
 
-## Project
+## Implementation
 
+The model consists of the next information:
 
+* ptsx: x coordinates of the waypoints of the track that the car must follow.
+* ptsy: y coordinates of the waypoints of the track that the car must follow.
+* px: the x coodinate of the position of the car in the simulator coordinates.
+* py: the y coordinate of the position of the car in the simulator coordinates.
+* psi: the orientation of the car.
+* v: the velocity of the car.
+* delta: the steering angle.
+* a: The throttle.
 
+The equations of the model used are the one described in the lessons.
+
+![Equations](/images/equations.png)
+
+The Timestep length and Elapsed duration chosen are the provided in the Udacity Q&A video of the project. These values means that we are considering the next one second of the car trajectory. I did not realize how important this paramater is until I began to change it. I made tests with 20 .05, 20 0.075 and the car crashes. With 20 and .1 the car completed the circuit but the behavior of the car was worse and it used more cpu. 
+
+Polynomial Fitting and MPC Preprocessing: We had to preprocess the waypoints because are in the simulator coordiantes system and transform to the vehicle perspective. Then we call to polyfit function with a degree of 3.
+
+Model Predictive Control with Latency: Latency is very important for this project. In the first version of my project I did not consider it and when I raise the velocity reference the car crashes. To deal with latency I calculated the state of the car 100 ms later than the data provided by the simulator (main.cpp lines 126-131) and then solve the MPC problem instead of using the "0 state".
 
 ---
 
