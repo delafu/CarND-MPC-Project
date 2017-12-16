@@ -17,7 +17,7 @@ The model consists of the next information:
 
 The equations of the model used are the one described in the lessons.
 
-![Equations](/images/equations.png)
+![Equations](equations.png)
 
 The Timestep length and Elapsed duration chosen are the provided in the Udacity Q&A video of the project. These values means that we are considering the next one second of the car trajectory. I did not realize how important this paramater is until I began to change it. I made tests with 20 .05, 20 0.075 and the car crashes. With 20 and .1 the car completed the circuit but the behavior of the car was worse and it used more cpu. 
 
